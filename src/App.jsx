@@ -64,7 +64,7 @@ export const App = () => {
   //編集を保存ボタン処理
   const editTodo = (todo, index) => {
     const newEditTodos = todoText.map((todo) => ({ ...todo }));
-    incompleteTodos[editIndex] = newTitle;
+    newEditTodos[editIndex] = newTitle;
     setTodoText(newEditTodos);
     setNewTitle("");
     closeEditForm();
