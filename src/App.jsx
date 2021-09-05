@@ -3,7 +3,7 @@ import "./styles.css";
 
 export const App = () => {
   //Todoリスト
-  const [todoText, setTodoText] = useState("");
+  const [todoText, setTodoText] = useState([]);
   const [incompleteTodos, setIncompleteTodos] = useState([]);
   const [completeTodos, setCompleteTodos] = useState([]);
   // 編集制御
