@@ -8,8 +8,8 @@ export const App = () => {
   const [completeTodos, setCompleteTodos] = useState([]);
   // 編集制御
   const [isEditable, setIsEditable] = useState(false);
-  const [editIndex, setEditIndex] = useState(-1);
-  const [newTitle, setNewTitle] = useState("");
+  const [editIndex, setEditIndex] = useState(0);
+  const [newTitle, setNewTitle] = useState([]);
   //作成フォームの状態制御
   const onChangeTodoText = (event) => setTodoText(event.target.value);
   //編集フォームの状態制御
@@ -18,7 +18,7 @@ export const App = () => {
   //追加ボタン
   const onClickAdd = () => {
     //空の場合は未完了リストへ追加しない
-    if (todoText === "") return;
+    if (todoText.length === 0) return;
     //未完了リストへ追加
     const newTodos = [...incompleteTodos, todoText];
     setIncompleteTodos(newTodos);
@@ -55,22 +55,23 @@ export const App = () => {
   //戻すボタン処理
   const onClickBack = (index) => {
     const newCompleteTodos = [...completeTodos];
+    console.log(completeTodos);
     newCompleteTodos.splice(index, 1);
     const newIncompleteTodos = [...incompleteTodos, completeTodos[index]];
     setCompleteTodos(newCompleteTodos);
     setIncompleteTodos(newIncompleteTodos);
   };
-
   //編集を保存ボタン処理
-  const editTodo = (todo, index) => {
-    const newEditTodos = todoText.map((todo) => ({ ...todo }));
-    newEditTodos[editIndex] = newTitle;
-    setTodoText(newEditTodos);
-    setNewTitle("");
+  const editTodo = () => {
+    // newEditTodos[editIndex].title = newTitle;
+    setIncompleteTodos((todo, editIndex) => {
+      incompleteTodos[editIndex] = newTitle;
+      return incompleteTodos;
+    });
+    console.log(newTitle);
     closeEditForm();
     setEditIndex();
   };
-
   return (
     <>
       {(() => {
@@ -94,12 +95,11 @@ export const App = () => {
               {/* 編集フォーム*/}
               <div className="input-area">
                 <input
-                  type="text"
-                  label="新しいタイトル"
+                  placeholder="編集を入力"
                   value={newTitle}
                   onChange={onChangeEditTodoText}
                 />
-                <button onClick={editTodo}>編集を保存</button>
+                <button onClick={() => editTodo(editIndex)}>編集を保存</button>
                 <button onClick={closeEditForm}>キャンセル</button>
               </div>
             </>
