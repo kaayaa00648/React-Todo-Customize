@@ -8,8 +8,8 @@ export const App = () => {
   const [completeTodos, setCompleteTodos] = useState([]);
   // 編集制御
   const [isEditable, setIsEditable] = useState(false);
-  const [editIndex, setEditIndex] = useState(0);
-  const [newTitle, setNewTitle] = useState([]);
+  const [editIndex, setEditIndex] = useState();
+  const [newTitle, setNewTitle] = useState("");
   //作成フォームの状態制御
   const onChangeTodoText = (event) => setTodoText(event.target.value);
   //編集フォームの状態制御
@@ -27,15 +27,19 @@ export const App = () => {
   };
   //編集ボタン処理
   const openEditForm = (index) => {
+    //編集ボタンをクリックした＝編集フォームが開く
     setIsEditable(true);
+    //実行されるたびにindexを受け取ってセットされる
     setEditIndex(index);
+    //未完了リストの特定の番目を編集フォームへ表示させる
+    setNewTitle(incompleteTodos[index]);
+    // console.log(index);
   };
   //キャンセルボタン処理
   const closeEditForm = () => {
     setIsEditable(false);
     setEditIndex();
   };
-
   //削除ボタン処理
   const onClickDelete = (index) => {
     const newTodos = [...incompleteTodos];
@@ -63,14 +67,13 @@ export const App = () => {
   };
   //編集を保存ボタン処理
   const editTodo = () => {
-    // newEditTodos[editIndex].title = newTitle;
-    setIncompleteTodos((todo, editIndex) => {
+    setIncompleteTodos((editIndex) => {
       incompleteTodos[editIndex] = newTitle;
       return incompleteTodos;
     });
     console.log(newTitle);
     closeEditForm();
-    setEditIndex();
+    setNewTitle();
   };
   return (
     <>
@@ -110,12 +113,12 @@ export const App = () => {
       <div className="incomplate-area">
         <p className="title">未完了のTODO</p>
         <ul>
-          {incompleteTodos.map((todo, index) => {
+          {incompleteTodos.map((newTitle, index) => {
             return (
-              <div key={todo} className="list-row">
-                <li>{todo}</li>
+              <div key={newTitle} className="list-row">
+                <li>{newTitle}</li>
                 <button onClick={() => onClickComplete(index)}>完了</button>
-                <button onClick={openEditForm}>編集</button>
+                <button onClick={() => openEditForm(index)}>編集</button>
                 {/* 関数に引数を渡す場合アロー関数で記述 */}
                 <button onClick={() => onClickDelete(index)}>削除</button>
               </div>
